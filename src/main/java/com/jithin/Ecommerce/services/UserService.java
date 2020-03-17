@@ -25,4 +25,11 @@ public class UserService extends BaseService<UserRepository, User> {
         return getRepository().save(valid_user);
 
     }
+
+    public User getUserByGoogleAuth(String idToken){
+
+        return getRepository().findByGoogleToken(idToken);
+    }
+
+
 }

@@ -25,23 +25,15 @@ public class User extends BaseModel implements UserDetails {
     private String firstName;
 
     @NotNull(message="google_auth_id is required field ")
-    private String google_auth_id;
+    private String googleToken;
 
     private String profilePicture;
     private String phoneNumber;
-
-
-
-
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
-
-
 
     @Override
     public boolean isAccountNonExpired() {

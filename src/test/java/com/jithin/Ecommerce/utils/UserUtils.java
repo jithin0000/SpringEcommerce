@@ -16,7 +16,7 @@ public class UserUtils {
         user.setUsername(USERNAME);
         user.setPassword(ENCRYPTED_PASSWORD);
         user.setFirstName(FIRSTNAME);
-        user.setGoogle_auth_id(GOOGLE_AUTH_ID);
+        user.setGoogleToken(GOOGLE_AUTH_ID);
         return user;
     }
 }

@@ -71,7 +71,14 @@ public class UserServiceTest {
     }
 
 
+    @Test
+    void getUserByGoogleAuth() {
+        when(repository.findByGoogleToken(anyString())).thenReturn(valid_user());
 
+        User result = SUT.getUserByGoogleAuth(GOOGLE_AUTH_ID);
+        ArgumentCaptor<String> ac = ArgumentCaptor.forClass(String.class);
+        verify(repository, times(1)).findByGoogleToken(ac.capture());
+        assertEquals(ac.getValue(), result.getGoogleToken());
 
-
+    }
 }

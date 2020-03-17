@@ -8,4 +8,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findByUsername(String username);
 
     User getById(String id);
+
+    User findByGoogleToken(String token);
 }
+
