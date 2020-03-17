@@ -32,4 +32,7 @@ public class UserService extends BaseService<UserRepository, User> {
     }
 
 
+    public User getUserByFacebookAuth(String idToken) {
+        return getRepository().findByFacebookToken(idToken);
+    }
 }

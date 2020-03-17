@@ -10,5 +10,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     User getById(String id);
 
     User findByGoogleToken(String token);
+
+    User findByFacebookToken(String idToken);
 }
 

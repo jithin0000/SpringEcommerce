@@ -24,8 +24,8 @@ public class User extends BaseModel implements UserDetails {
     @NotNull(message="firstName is required field ")
     private String firstName;
 
-    @NotNull(message="google_auth_id is required field ")
     private String googleToken;
+    private String facebookToken;
 
     private String profilePicture;
     private String phoneNumber;
