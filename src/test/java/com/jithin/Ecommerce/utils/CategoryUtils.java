@@ -13,7 +13,8 @@ public class CategoryUtils {
         List<Category> c_list = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            Category c = new Category(CATEGORY_NAME + i);
+            Category c = new Category();
+            c.setName(CATEGORY_NAME + i);
             c.setId(CATEGORY_ID +i);
             c_list.add(c);
         }
@@ -21,7 +22,8 @@ public class CategoryUtils {
     }
 
     public static Category valid_category(){
-        Category category = new Category(CATEGORY_NAME);
+        Category category = new Category();
+        category.setName(CATEGORY_NAME);
         category.setId(CATEGORY_ID);
         return category;
     }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/category")
@@ -38,6 +39,13 @@ public class CategoryController {
 
         String message = service.deleteById(id);
         return ResponseEntity.ok(message);
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<?> filterCategoriesByName(
+            @RequestParam(name = "search", defaultValue = "#44") String search
+    ){
+        return ResponseEntity.ok( service.categoriesByName(search));
     }
 
 
