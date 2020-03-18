@@ -1,6 +1,10 @@
 package com.jithin.Ecommerce.utils;
 
 import com.jithin.Ecommerce.models.User;
+import com.jithin.Ecommerce.models.UserRole;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserUtils {
     public static final String USER_ID = "5e71bcb3c91e21511a6d44a4";
@@ -20,6 +24,11 @@ public class UserUtils {
         user.setFirstName(FIRSTNAME);
         user.setGoogleToken(GOOGLE_AUTH_ID);
         user.setFacebookToken(FACEBOOKTOKEN);
+        List<UserRole> roles = new ArrayList<>();
+        UserRole role = new UserRole();
+        role.setName("USER");
+        roles.add(role);
+        user.setRoles(roles);
         return user;
     }
 }
