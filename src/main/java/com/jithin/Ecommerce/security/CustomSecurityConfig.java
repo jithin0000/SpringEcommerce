@@ -71,8 +71,9 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
 
                 ).permitAll().antMatchers("/api/user/**").permitAll()
-
-                .anyRequest().authenticated();
+                .antMatchers(HttpMethod.GET, "/api/category/**")
+                .permitAll()
+                .anyRequest().fullyAuthenticated();
 
         http.addFilterBefore(authenticationFilter(),
                 UsernamePasswordAuthenticationFilter.class);

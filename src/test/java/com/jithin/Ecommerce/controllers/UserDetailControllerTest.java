@@ -1,6 +1,7 @@
 package com.jithin.Ecommerce.controllers;
 
 import com.jithin.Ecommerce.security.JwtTokenProvider;
+import com.jithin.Ecommerce.services.CustomUserDetailServices;
 import com.jithin.Ecommerce.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +15,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 
+import java.security.Principal;
 import java.util.Optional;
 
 import static com.jithin.Ecommerce.controllers.UserControllerTest.GENERATED_TOKEN;
-import static com.jithin.Ecommerce.utils.UserUtils.USER_ID;
-import static com.jithin.Ecommerce.utils.UserUtils.valid_user;
+import static com.jithin.Ecommerce.utils.UserUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -32,7 +33,7 @@ class UserDetailControllerTest {
     @Autowired
     private TestRestTemplate template;
     @MockBean
-    private UserService userService;
+    private CustomUserDetailServices userService;
 
     private SecurityContext context;
     @Autowired
@@ -40,13 +41,14 @@ class UserDetailControllerTest {
     private UsernamePasswordAuthenticationToken authenticationToken;
     private AuthenticationManager authenticationManager;
     private Authentication authentication;
+    private Principal principal;
 
     @BeforeEach
     void setUp() {
         authentication = mock(Authentication.class);
         authenticationManager = mock(AuthenticationManager.class);
         context = mock(SecurityContext.class);
-//        jwtTokenProvider = mock(JwtTokenProvider.class);
+        principal = mock(Principal.class);
 
         when(authenticationManager.authenticate(any(Authentication.class)))
                 .thenReturn(authentication);
@@ -57,12 +59,13 @@ class UserDetailControllerTest {
 
     @Test
     void getUser() {
+        when(principal.getName()).thenReturn(USERNAME);
 
-        when(userService.getById(anyString())).thenReturn(Optional.of(valid_user()));
+        when(userService.loadUserByUsername(anyString())).thenReturn(valid_user());
 
         HttpHeaders header = generateHeaders();
         HttpEntity<?> entity = new HttpEntity<>(header);
-        ResponseEntity<String> response = template.exchange(API_USER_DETAILS+"/"+USER_ID
+        ResponseEntity<String> response = template.exchange(API_USER_DETAILS+"/me"
                 , HttpMethod.GET,
                 entity, String.class);
 
