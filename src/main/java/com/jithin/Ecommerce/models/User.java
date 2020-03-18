@@ -3,12 +3,13 @@ package com.jithin.Ecommerce.models;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
+import java.util.*;
 
 @Data
 @Document
@@ -30,9 +31,16 @@ public class User extends BaseModel implements UserDetails {
     private String profilePicture;
     private String phoneNumber;
 
+    private List<UserRole> roles = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Set authoraties = new HashSet();
+                getRoles().stream()
+                .forEach(
+                        item ->authoraties.add(new SimpleGrantedAuthority("ROLE_"+ item.getName()))
+                );
+        return authoraties;
     }
 
     @Override
