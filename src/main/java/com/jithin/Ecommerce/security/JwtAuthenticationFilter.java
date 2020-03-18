@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
+            System.out.println("response is "+e.getLocalizedMessage());
         }
 
         filterChain.doFilter(request, response);

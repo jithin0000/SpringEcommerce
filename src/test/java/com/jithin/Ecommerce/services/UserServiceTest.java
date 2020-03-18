@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Optional;
+
 import static com.jithin.Ecommerce.utils.UserUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -81,4 +83,41 @@ public class UserServiceTest {
         assertEquals(ac.getValue(), result.getGoogleToken());
 
     }
+
+    @Test
+    void findByFbTokenSuccess(){
+        when(repository.findByFacebookToken(anyString())).thenReturn(valid_user());
+        User result = SUT.getUserByFacebookAuth(FACEBOOKTOKEN);
+        ArgumentCaptor<String> ac = ArgumentCaptor.forClass(String.class);
+        verify(repository, times(1)).findByFacebookToken(ac.capture());
+        assertEquals(ac.getValue(), result.getFacebookToken());
+    }
+
+    @Test
+    void getUserById(){
+        when(repository.findById(anyString())).thenReturn(Optional.of(valid_user()));
+        Optional<User> result = SUT.getById(USER_ID);
+
+        ArgumentCaptor<String> ac = ArgumentCaptor.forClass(String.class);
+        verify(repository, times(1)).findById(ac.capture());
+        assertEquals(ac.getValue(), result.get().getId());
+
+    }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

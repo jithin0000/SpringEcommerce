@@ -71,14 +71,15 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
 
                 ).permitAll().antMatchers("/api/user/**").permitAll()
+
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationFilter(),
                 UsernamePasswordAuthenticationFilter.class);
 
     }
-
-    private JwtAuthenticationFilter authenticationFilter() {
+    @Bean
+    public JwtAuthenticationFilter authenticationFilter() {
         return new JwtAuthenticationFilter();
     }
 }

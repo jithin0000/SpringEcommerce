@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.jithin.Ecommerce.dto.JwtResponse;
 import com.jithin.Ecommerce.dto.LoginRequestDto;
 import com.jithin.Ecommerce.dto.SocialLoginRequest;
+import com.jithin.Ecommerce.exceptions.UserNotFoundException;
 import com.jithin.Ecommerce.models.User;
 import com.jithin.Ecommerce.security.JwtTokenProvider;
 import com.jithin.Ecommerce.services.UserService;
@@ -167,6 +168,9 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+
+
+
     private String generateTokenUsingUsernameAndPassword(String password, String username) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -178,6 +182,8 @@ public class UserController {
 
         return jwtTokenProvider.generateToken(authentication);
     }
+
+
 }
 
 
