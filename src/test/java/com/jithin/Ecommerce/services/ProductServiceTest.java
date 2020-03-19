@@ -8,14 +8,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.jithin.Ecommerce.utils.ProductUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -75,8 +75,23 @@ class ProductServiceTest {
 
     }
 
+    @Test
+    void findProductsByName(){
+        when(repository.findAllBy(any(TextCriteria.class))).thenReturn(filterd_products());
+        List<Product> result = SUT.filterProductsByName(PRODUCTNAME);
 
+        assertNotNull(result);
+        assertEquals(4, result.size());
+        ArgumentCaptor<TextCriteria> ac = ArgumentCaptor.forClass(TextCriteria.class);
+        verify(repository, times(1)).findAllBy(ac.capture());
 
+    }
+
+    private List<Product> filterd_products() {
+
+        return productList().stream().filter(item -> item.getName()
+                .contains(PRODUCTNAME)).collect(Collectors.toList());
+    }
 
 
 }

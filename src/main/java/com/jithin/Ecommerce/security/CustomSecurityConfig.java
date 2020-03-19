@@ -71,7 +71,9 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
 
                 ).permitAll().antMatchers("/api/user/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/category/**")
+                .antMatchers(HttpMethod.GET,
+                        "/api/category/**",
+                        "/api/product/**")
                 .permitAll()
                 .anyRequest().fullyAuthenticated();
 

@@ -69,7 +69,7 @@ class UserDetailControllerTest {
                 , HttpMethod.GET,
                 entity, String.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     private HttpHeaders generateHeaders() {
