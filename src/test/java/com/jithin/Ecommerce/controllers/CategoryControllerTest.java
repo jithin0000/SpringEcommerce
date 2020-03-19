@@ -171,8 +171,40 @@ class CategoryControllerTest {
     }
 
 
+    @Test
+    void updateCategory() throws JsonProcessingException {
+
+        when(service.getById(anyString())).thenReturn(Optional.of(valid_category()));
+        when(service.update(valid_category())).thenReturn(updated_category());
+
+        String body = om.writeValueAsString(updated_category());
+
+        HttpEntity<?> entity = new HttpEntity<>(body, generateHeaders());
+        ResponseEntity<Category> response = template.exchange(API_CATEGORY + "/update/" + CATEGORY_ID,
+                HttpMethod.PUT, entity, Category.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        ArgumentCaptor<String> ac = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<Category> ac2 = ArgumentCaptor.forClass(Category.class);
+
+        verify(service, times(1)).getById(ac.capture());
+        verify(service, times(1)).update(ac2.capture());
+
+
+
+    }
+
 
 }
+
+
+
+
+
+
+
+
+
 
 
 

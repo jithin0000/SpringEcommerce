@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class CategoryUtils {
+    public static final String UPDATED_CATEGORY = "UPDATED_CATEGORY";
+
     public static final String CATEGORY_ID = "categoryId";
     public static final String CATEGORY_NAME = "category IName";
     public static List<Category> category_list() {
@@ -32,6 +35,13 @@ public class CategoryUtils {
 
         return category_list().stream().filter(item -> item.getName().contains(CATEGORY_NAME))
                 .collect(Collectors.toList());
+    }
+
+    public static Category updated_category() {
+        Category u_category = new Category();
+        u_category.setId(CATEGORY_ID);
+        u_category.setName(UPDATED_CATEGORY);
+        return u_category;
     }
 
 

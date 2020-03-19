@@ -19,7 +19,6 @@ import static org.mockito.Mockito.*;
 class CategoryServiceTest {
 
 
-    public static final String UPDATED_CATEGORY = "UPDATED_CATEGORY";
     @Mock
     private CategoryRepository repository;
     @InjectMocks
@@ -99,10 +98,5 @@ class CategoryServiceTest {
         assertEquals(CATEGORY_ID, result.getId());
     }
 
-    private Category updated_category() {
-        Category u_category = new Category();
-        u_category.setId(CATEGORY_ID);
-        u_category.setName(UPDATED_CATEGORY);
-        return u_category;
-    }
+
 }

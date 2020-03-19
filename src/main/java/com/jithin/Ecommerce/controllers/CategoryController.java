@@ -30,8 +30,8 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategory(@PathVariable String id) {
-        Category department = service.getById(id).orElseThrow(() -> new CategoryNotFoundException(id));
-        return ResponseEntity.ok(department);
+        Category category = service.getById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+        return ResponseEntity.ok(category);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -45,12 +45,17 @@ public class CategoryController {
     @GetMapping("/name")
     public ResponseEntity<?> filterCategoriesByName(
             @RequestParam(name = "search", defaultValue = "#44") String search
-    ){
-        return ResponseEntity.ok( service.categoriesByName(search));
+    ) {
+        return ResponseEntity.ok(service.categoriesByName(search));
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateCategory(@PathVariable String id, @Valid @RequestBody Category body) {
 
+        Category category = service.getById(id).orElseThrow(() -> new CategoryNotFoundException(id));
 
+        Category update = service.update(category);
+        return ResponseEntity.ok(update);
 
-
+    }
 }
