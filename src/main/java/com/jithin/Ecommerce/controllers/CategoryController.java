@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/category")
@@ -49,6 +48,8 @@ public class CategoryController {
     ){
         return ResponseEntity.ok( service.categoriesByName(search));
     }
+
+
 
 
 

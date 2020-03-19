@@ -4,6 +4,7 @@ import com.jithin.Ecommerce.models.Category;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoryUtils {
     public static final String CATEGORY_ID = "categoryId";
@@ -14,7 +15,7 @@ public class CategoryUtils {
 
         for (int i = 0; i < 4; i++) {
             Category c = new Category();
-            c.setName(CATEGORY_NAME + i);
+            c.setName(CATEGORY_NAME +" "+ i);
             c.setId(CATEGORY_ID +i);
             c_list.add(c);
         }
@@ -27,5 +28,11 @@ public class CategoryUtils {
         category.setId(CATEGORY_ID);
         return category;
     }
+    public static List<Category> filtered_category_list() {
+
+        return category_list().stream().filter(item -> item.getName().contains(CATEGORY_NAME))
+                .collect(Collectors.toList());
+    }
+
 
 }

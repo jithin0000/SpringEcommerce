@@ -16,4 +16,12 @@ public class CategoryService extends BaseService<CategoryRepository, Category> {
 
     }
 
+    public Category update(Category category) {
+
+        Category up_category = new Category();
+        up_category.setName(category.getName());
+        up_category.setUpdated(category.getUpdated());
+
+        return getRepository().save(up_category);
+    }
 }

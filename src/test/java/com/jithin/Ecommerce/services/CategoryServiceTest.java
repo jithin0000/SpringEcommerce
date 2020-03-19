@@ -9,8 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.swing.text.html.Option;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +19,7 @@ import static org.mockito.Mockito.*;
 class CategoryServiceTest {
 
 
+    public static final String UPDATED_CATEGORY = "UPDATED_CATEGORY";
     @Mock
     private CategoryRepository repository;
     @InjectMocks
@@ -77,4 +76,33 @@ class CategoryServiceTest {
     }
 
 
+    @Test
+    void categoriesByName() {
+        when(repository.findByName(anyString())).thenReturn(filtered_category_list());
+
+        List<Category> result = SUT.categoriesByName(CATEGORY_NAME);
+        assertEquals(4, result.size());
+
+        ArgumentCaptor<String> ac = ArgumentCaptor.forClass(String.class);
+        verify(repository, times(1)).findByName(ac.capture());
+
+    }
+
+    @Test
+    void updateCategory(){
+        when(repository.save(any(Category.class))).thenReturn(updated_category());
+        Category result = SUT.update(updated_category());
+
+        assertEquals(UPDATED_CATEGORY, result.getName());
+        ArgumentCaptor<Category> ac = ArgumentCaptor.forClass(Category.class);
+        verify(repository, times(1)).save(ac.capture());
+        assertEquals(CATEGORY_ID, result.getId());
+    }
+
+    private Category updated_category() {
+        Category u_category = new Category();
+        u_category.setId(CATEGORY_ID);
+        u_category.setName(UPDATED_CATEGORY);
+        return u_category;
+    }
 }

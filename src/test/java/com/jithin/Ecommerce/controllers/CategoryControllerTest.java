@@ -78,12 +78,12 @@ class CategoryControllerTest {
 
         String body = om.writeValueAsString(valid_category());
         HttpEntity<?> entity = new HttpEntity<>(body, generateHeaders());
-        ResponseEntity<String> response = template.exchange(API_CATEGORY, HttpMethod.POST, entity,
-                String.class);
+        ResponseEntity<Category> response = template.exchange(API_CATEGORY, HttpMethod.POST, entity,
+                Category.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         ArgumentCaptor<Category> ac = ArgumentCaptor.forClass(Category.class);
         verify(service, times(1)).create(ac.capture());
-        assertTrue(response.getBody().contains(ac.getValue().getName()));
+        assertEquals(ac.getValue().getName(), response.getBody().getName());
     }
 
     @Test
@@ -105,14 +105,15 @@ class CategoryControllerTest {
 
         when(service.getById(anyString())).thenReturn(Optional.of(valid_category()));
         HttpEntity<?> entity = new HttpEntity<>(generateHeaders());
-        ResponseEntity<String> response = template.exchange(API_CATEGORY + "/" + CATEGORY_ID, HttpMethod.GET,
+        ResponseEntity<Category> response = template.exchange(API_CATEGORY + "/" + CATEGORY_ID,
+                HttpMethod.GET,
                 entity,
-                String.class);
+                Category.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         ArgumentCaptor<String> ac = ArgumentCaptor.forClass(String.class);
         verify(service, times(1)).getById(ac.capture());
-        assertTrue(response.getBody().contains(ac.getValue()));
+        assertEquals(ac.getValue(), response.getBody().getId());
     }
 
     @Test
@@ -154,4 +155,30 @@ class CategoryControllerTest {
         return headers;
     }
 
+    @Test
+    void filterCategoriesByName() {
+
+        when(service.categoriesByName(anyString())).thenReturn(filtered_category_list());
+
+        HttpEntity<?> entity = new HttpEntity<>(generateHeaders());
+        ResponseEntity<String> response = template.exchange(
+                API_CATEGORY+"/name?search="+CATEGORY_NAME
+                , HttpMethod.GET,
+                entity, String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(service, times(1)).categoriesByName(CATEGORY_NAME);
+    }
+
+
+
 }
+
+
+
+
+
+
+
+
+
