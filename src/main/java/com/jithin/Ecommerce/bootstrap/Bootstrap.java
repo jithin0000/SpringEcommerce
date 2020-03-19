@@ -30,7 +30,7 @@ public class Bootstrap implements CommandLineRunner {
 
 //        generateRoles();
 
-        generateCategories(faker);
+//        generateCategories(faker);
 
 //        generateProduct(faker);
 

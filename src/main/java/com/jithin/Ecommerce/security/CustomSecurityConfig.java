@@ -70,7 +70,8 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js"
 
-                ).permitAll().antMatchers("/api/user/**").permitAll()
+                ).permitAll().antMatchers("/api/user/**",
+                "/api/cart/**").permitAll()
                 .antMatchers(HttpMethod.GET,
                         "/api/category/**",
                         "/api/product/**")
