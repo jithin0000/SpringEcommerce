@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductUtils {
     public static final String PRODUCTID = "productid";
@@ -84,5 +85,11 @@ public class ProductUtils {
         product.setSize(sizelist);
 
         return product;
+    }
+
+    public static List<Product> filteredProduct() {
+
+        return productList().stream().filter(item -> item.getName()
+                .contains(PRODUCTNAME)).collect(Collectors.toList());
     }
 }

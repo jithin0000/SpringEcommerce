@@ -19,6 +19,8 @@ import org.springframework.security.core.Authentication;
 
 import java.util.Optional;
 
+import static com.jithin.Ecommerce.utils.CategoryUtils.CATEGORY_NAME;
+import static com.jithin.Ecommerce.utils.CategoryUtils.filtered_category_list;
 import static com.jithin.Ecommerce.utils.ProductUtils.*;
 import static com.jithin.Ecommerce.utils.UserUtils.valid_user;
 import static org.junit.jupiter.api.Assertions.*;
@@ -128,6 +130,21 @@ class ProductControllerTest {
         assertTrue(result.getBody().contains(ac.getValue()));
 
 
+    }
+
+    @Test
+    void filterCategoriesByName() {
+
+        when(service.filterProductsByName(anyString())).thenReturn(filteredProduct());
+
+        HttpEntity<?> entity = new HttpEntity<>(generateHeaders());
+        ResponseEntity<String> response = template.exchange(
+                API_PRODUCT+"/name?search="+PRODUCTNAME
+                , HttpMethod.GET,
+                entity, String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(service, times(1)).filterProductsByName(PRODUCTNAME);
     }
 
     private HttpHeaders generateHeaders() {

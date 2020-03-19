@@ -1,6 +1,7 @@
 package com.jithin.Ecommerce.models;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import java.util.List;
 public class Product extends BaseModel {
 
     @NotNull(message = "name is required field ")
+    @TextIndexed
     private String name;
     @NotNull(message = "description is required field ")
     private String description;

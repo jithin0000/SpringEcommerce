@@ -40,6 +40,13 @@ public class ProductController {
         return ResponseEntity.ok(message);
     }
 
+    @GetMapping("/name")
+    public ResponseEntity<?> filterProductByName(
+            @RequestParam(name = "search", defaultValue = "#44") String search
+    ) {
+        return ResponseEntity.ok(productService.filterProductsByName(search));
+    }
+
 
 }
 

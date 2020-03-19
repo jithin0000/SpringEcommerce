@@ -13,8 +13,7 @@ public class ProductService extends BaseService<ProductRepository, Product> {
 
     public List<Product> filterProductsByName(String name){
 
-        TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(name);
-        return getRepository().findAllBy(criteria);
+        return getRepository().findByName(name);
     }
 
 }

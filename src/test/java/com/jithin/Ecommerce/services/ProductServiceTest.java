@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.query.TextCriteria;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.jithin.Ecommerce.utils.ProductUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,21 +76,17 @@ class ProductServiceTest {
 
     @Test
     void findProductsByName(){
-        when(repository.findAllBy(any(TextCriteria.class))).thenReturn(filterd_products());
+        when(repository.findByName(any(String.class))).thenReturn(filteredProduct());
         List<Product> result = SUT.filterProductsByName(PRODUCTNAME);
 
         assertNotNull(result);
         assertEquals(4, result.size());
-        ArgumentCaptor<TextCriteria> ac = ArgumentCaptor.forClass(TextCriteria.class);
-        verify(repository, times(1)).findAllBy(ac.capture());
+        ArgumentCaptor<String > ac = ArgumentCaptor.forClass(String.class);
+        verify(repository, times(1)).findByName(ac.capture());
 
     }
 
-    private List<Product> filterd_products() {
 
-        return productList().stream().filter(item -> item.getName()
-                .contains(PRODUCTNAME)).collect(Collectors.toList());
-    }
 
 
 }
