@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CategoryUtils {
     public static final String CATEGORY_ID = "categoryId";
-    public static final String CATEGORY_NAME = "categoryIName";
+    public static final String CATEGORY_NAME = "category IName";
     public static List<Category> category_list() {
 
         List<Category> c_list = new ArrayList<>();

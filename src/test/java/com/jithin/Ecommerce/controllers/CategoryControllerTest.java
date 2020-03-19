@@ -1,5 +1,7 @@
 package com.jithin.Ecommerce.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.jithin.Ecommerce.models.Category;
 import com.jithin.Ecommerce.security.JwtTokenProvider;
@@ -41,6 +43,8 @@ class CategoryControllerTest {
     private TestRestTemplate template;
     @MockBean
     private CategoryService service;
+    private static ObjectMapper om = new ObjectMapper();
+
 
     @BeforeEach
     void setUp() {
@@ -69,10 +73,10 @@ class CategoryControllerTest {
     }
 
     @Test
-    void createCategory() {
+    void createCategory() throws JsonProcessingException {
         when(service.create(any(Category.class))).thenReturn(valid_category());
 
-        String body = new Gson().toJson(valid_category());
+        String body = om.writeValueAsString(valid_category());
         HttpEntity<?> entity = new HttpEntity<>(body, generateHeaders());
         ResponseEntity<String> response = template.exchange(API_CATEGORY, HttpMethod.POST, entity,
                 String.class);
@@ -114,7 +118,8 @@ class CategoryControllerTest {
     @Test
     void getCategoryByIdThrowException_404(){
         HttpEntity<?> entity = new HttpEntity<>(generateHeaders());
-        ResponseEntity<String> response = template.exchange(API_CATEGORY + "/" + "invalid_id", HttpMethod.GET,
+        ResponseEntity<String> response = template.exchange(API_CATEGORY + "/" + "invalid_id",
+                HttpMethod.GET,
                 entity,
                 String.class);
 

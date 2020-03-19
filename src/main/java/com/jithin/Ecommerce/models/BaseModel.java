@@ -10,5 +10,7 @@ public class BaseModel {
     @Id
     private String id;
 
+    private Date created = new Date();
+    private Date updated = new Date();
 
 }

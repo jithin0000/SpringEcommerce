@@ -1,5 +1,6 @@
 package com.jithin.Ecommerce.controllers;
 
+import com.jithin.Ecommerce.dto.DeleteMessage;
 import com.jithin.Ecommerce.exceptions.CategoryNotFoundException;
 import com.jithin.Ecommerce.models.Category;
 import com.jithin.Ecommerce.services.CategoryService;
@@ -37,7 +38,8 @@ public class CategoryController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCategoryById(@PathVariable String id) {
 
-        String message = service.deleteById(id);
+        DeleteMessage message = new DeleteMessage();
+        message.setMessage(service.deleteById(id));
         return ResponseEntity.ok(message);
     }
 
