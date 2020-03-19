@@ -105,7 +105,11 @@ class CartControllerTest {
         verify(service, times(1)).create(ac.capture());
         verify(userService, times(2)).loadByUserId(USER_ID);
         verify(productService, times(1)).getById(PRODUCTID);
+
+
     }
+
+    // FIXME: 19/03/20 need to add two more methods to check remove product
 
 
 
