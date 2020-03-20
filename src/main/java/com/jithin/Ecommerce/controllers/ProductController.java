@@ -1,5 +1,6 @@
 package com.jithin.Ecommerce.controllers;
 
+import com.jithin.Ecommerce.dto.DeleteMessage;
 import com.jithin.Ecommerce.exceptions.ProductNotFoundException;
 import com.jithin.Ecommerce.models.Product;
 import com.jithin.Ecommerce.services.ProductService;
@@ -36,7 +37,9 @@ public class ProductController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
 
-        String message = productService.deleteById(id);
+        DeleteMessage message = new DeleteMessage();
+        message.setMessage(productService.deleteById(id));
+
         return ResponseEntity.ok(message);
     }
 

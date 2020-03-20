@@ -19,6 +19,8 @@ target/
 *.iml
 *.ipr
 
+/src/main/java/com/jithin/Ecommerce/services/CloudinaryConstants.java
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -29,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+

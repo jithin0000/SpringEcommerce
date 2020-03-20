@@ -68,7 +68,7 @@ public class UserController {
 
                 user.getRoles().add(role);
             }
-        }else{
+        } else {
             UserRole role = roleService.getByName("USER")
                     .orElseThrow(() -> new UserRoleNotFoundException("USER"));
             user.getRoles().add(role);
@@ -99,52 +99,31 @@ public class UserController {
         JwtResponse response = new JwtResponse();
 
 
-
-        if (request.getProvider().equals("GOOGLE")){
-
-            HttpTransport transport = new NetHttpTransport();
-
-            JsonFactory jsonFactory = new JacksonFactory();
-            String cilentId ="735347369403-hu7c6e1kdbs5ggct9raa7e42oi4oo8vi.apps.googleusercontent.com";
-            GoogleIdTokenVerifier verifier =
-                    new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                            .setAudience(Collections.singletonList(cilentId))
-                            .build();
-
-            String idToken = request.getGoogleAuthToken();
+        if (request.getProvider().equals("GOOGLE")) {
 
 
             try {
-                GoogleIdToken googleIdToken = verifier.verify(idToken);
+                GoogleIdToken googleIdToken = getGoogleIdToken(request);
 
                 if (googleIdToken != null) {
                     GoogleIdToken.Payload payload = googleIdToken.getPayload();
 
                     String googleAuthToken = payload.getSubject();
-                    User  dbUser = userService.getUserByGoogleAuth(googleAuthToken);
+                    User dbUser = userService.getUserByGoogleAuth(googleAuthToken);
 
                     if (dbUser == null) {
                         String name = (String) payload.get("name");
-                        String email =  payload.getEmail();
+                        String email = payload.getEmail();
                         String profilePicture = (String) payload.get("picture");
 
-                        user.setGoogleToken(googleAuthToken);
-                        user.setUsername(email);
-                        user.setFirstName(name);
-                        user.setPassword(googleAuthToken);
-                        UserRole role = roleService.getByName("USER")
-                                .orElseThrow(() -> new UserRoleNotFoundException("USER"));
-                        user.getRoles().add(role);
-
-                        user.setProfilePicture(profilePicture);
-                        User registered = userService.registerUser(user);
+                        User registered = generateUser(user, googleAuthToken, name, email, profilePicture);
 
                         String jwtToken = generateTokenUsingUsernameAndPassword(googleAuthToken,
                                 registered.getUsername());
 
                         response = new JwtResponse("Bearer " + jwtToken);
 
-                    }else {
+                    } else {
 
                         String jwtToken = generateTokenUsingUsernameAndPassword(dbUser.getGoogleToken(),
                                 dbUser.getUsername());
@@ -165,45 +144,70 @@ public class UserController {
                     .getFacebookAccessToken());
 
             if (fbUser == null) {
-                user.setUsername(request.getFacebookRequest().getFbEmail());
-                user.setFirstName(request.getFacebookRequest().getFbUsername());
-                user.setPassword(request.getFacebookRequest().getFacebookUserId());
-                user.setProfilePicture(request.getFacebookRequest().getFbProfilePicture());
-                user.setFacebookToken(request.getFacebookRequest().getFacebookAccessToken());
-                UserRole role = roleService.getByName("USER")
-                        .orElseThrow(() -> new UserRoleNotFoundException("USER"));
-                user.getRoles().add(role);
-
-
-                User regUser = userService.registerUser(user);
+                User regUser = generateFbUser(request, user);
 
                 String token = generateTokenUsingUsernameAndPassword(
                         request.getFacebookRequest().getFacebookUserId(),
                         regUser.getUsername()
                 );
 
-                response.setToken("Bearer "+token);
+                response.setToken("Bearer " + token);
 
-            }else {
+            } else {
                 String jwtToken = generateTokenUsingUsernameAndPassword(
                         request.getFacebookRequest().getFacebookUserId(),
                         fbUser.getUsername()
                 );
 
-                response.setToken("Bearer "+jwtToken);
+                response.setToken("Bearer " + jwtToken);
             }
 
         }
 
 
-
-
-
-
         return ResponseEntity.ok(response);
     }
 
+    private User generateFbUser(@RequestBody @Valid SocialLoginRequest request, User user) {
+        user.setUsername(request.getFacebookRequest().getFbEmail());
+        user.setFirstName(request.getFacebookRequest().getFbUsername());
+        user.setPassword(request.getFacebookRequest().getFacebookUserId());
+        user.setProfilePicture(request.getFacebookRequest().getFbProfilePicture());
+        user.setFacebookToken(request.getFacebookRequest().getFacebookAccessToken());
+        UserRole role = roleService.getByName("USER")
+                .orElseThrow(() -> new UserRoleNotFoundException("USER"));
+        user.getRoles().add(role);
 
+
+        return userService.registerUser(user);
+    }
+
+    private User generateUser(User user, String googleAuthToken, String name, String email, String profilePicture) {
+        user.setGoogleToken(googleAuthToken);
+        user.setUsername(email);
+        user.setFirstName(name);
+        user.setPassword(googleAuthToken);
+        UserRole role = roleService.getByName("USER")
+                .orElseThrow(() -> new UserRoleNotFoundException("USER"));
+        user.getRoles().add(role);
+
+        user.setProfilePicture(profilePicture);
+        return userService.registerUser(user);
+    }
+
+    private GoogleIdToken getGoogleIdToken(@RequestBody @Valid SocialLoginRequest request) throws GeneralSecurityException, IOException {
+        HttpTransport transport = new NetHttpTransport();
+
+        JsonFactory jsonFactory = new JacksonFactory();
+        String cilentId = "735347369403-hu7c6e1kdbs5ggct9raa7e42oi4oo8vi.apps.googleusercontent.com";
+        GoogleIdTokenVerifier verifier =
+                new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+                        .setAudience(Collections.singletonList(cilentId))
+                        .build();
+
+        String idToken = request.getGoogleAuthToken();
+        return verifier.verify(idToken);
+    }
 
 
     private String generateTokenUsingUsernameAndPassword(String password, String username) {
