@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static com.jithin.Ecommerce.controllers.UserControllerTest.GENERATED_TOKEN;
@@ -30,36 +31,28 @@ import static org.mockito.Mockito.when;
 class UserDetailControllerTest {
 
     public static final String API_USER_DETAILS = "/api/detail";
-    @Autowired
-    private TestRestTemplate template;
+
+    @MockBean
+    private UserService service;
     @MockBean
     private CustomUserDetailServices userService;
 
-    private SecurityContext context;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-    private UsernamePasswordAuthenticationToken authenticationToken;
-    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TestRestTemplate template;
+
     private Authentication authentication;
-    private Principal principal;
 
     @BeforeEach
     void setUp() {
         authentication = mock(Authentication.class);
-        authenticationManager = mock(AuthenticationManager.class);
-        context = mock(SecurityContext.class);
-        principal = mock(Principal.class);
-
-        when(authenticationManager.authenticate(any(Authentication.class)))
-                .thenReturn(authentication);
-        context.setAuthentication(authentication);
-        when(authentication.getPrincipal()).thenReturn(valid_user());
-
     }
 
     @Test
     void getUser() {
-        when(principal.getName()).thenReturn(USERNAME);
+//        when(principal.getName()).thenReturn(USERNAME);
 
         when(userService.loadUserByUsername(anyString())).thenReturn(valid_user());
 
@@ -73,12 +66,25 @@ class UserDetailControllerTest {
     }
 
     private HttpHeaders generateHeaders() {
-        HttpHeaders headers = new HttpHeaders();
+        when(authentication.getPrincipal()).thenReturn(valid_user());
 
+        HttpHeaders headers = new HttpHeaders();
        String token =   jwtTokenProvider.generateToken(authentication);
 
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
         return headers;
+    }
+
+    @Test
+    void getAll() {
+        when(service.getAll()).thenReturn(Arrays.asList(valid_user()));
+
+        HttpEntity<?> entity = new HttpEntity<>(generateHeaders());
+
+        ResponseEntity<String> response
+                = template.exchange(API_USER_DETAILS, HttpMethod.GET, entity, String.class);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 }

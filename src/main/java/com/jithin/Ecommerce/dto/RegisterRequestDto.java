@@ -27,5 +27,5 @@ public class RegisterRequestDto {
     private String profilePicture;
     private String phoneNumber;
 
-    private List<String> roles ;
+    private List<String> roles = new ArrayList<>() ;
 }

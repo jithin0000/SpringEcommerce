@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserUtils {
-    public static final String USER_ID = "5e71bcb3c91e21511a6d44a4";
+    public static final String USER_ID = "5e770fc908b3b24b4b367636";
     public static final String USERNAME = "email@gmail.com";
-    public static final String PASSWORD = "password";
-    public static final String FIRSTNAME = "firstname";
+    public static final String PASSWORD = "456adfsf";
+    public static final String FIRSTNAME = "email1";
     public static final String GOOGLE_AUTH_ID = "google_auth_id";
     public static final String ENCRYPTED_PASSWORD = "encrypted_password";
     public static final String FACEBOOKTOKEN = "FACEBOOKTOKEN";

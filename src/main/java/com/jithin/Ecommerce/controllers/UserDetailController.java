@@ -24,6 +24,10 @@ public class UserDetailController {
     @Autowired
     private CustomUserDetailServices userDetailServices;
 
+    @GetMapping("")
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(userService.getAll());
+    }
 
     @GetMapping("/me")
     public ResponseEntity<?> getUser(@AuthenticationPrincipal Principal principal) {
