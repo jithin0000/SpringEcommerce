@@ -1,6 +1,7 @@
 package com.jithin.Ecommerce.controllers;
 
 import com.jithin.Ecommerce.dto.DeleteMessage;
+import com.jithin.Ecommerce.dto.ProductQueryRequest;
 import com.jithin.Ecommerce.exceptions.ProductNotFoundException;
 import com.jithin.Ecommerce.models.Product;
 import com.jithin.Ecommerce.services.ProductService;
@@ -28,6 +29,12 @@ public class ProductController {
         return new ResponseEntity<>(productService.create(product), HttpStatus.CREATED);
     }
 
+    @PostMapping("/filter")
+    public ResponseEntity<?> filterProducts(@Valid @RequestBody ProductQueryRequest request) {
+        return new ResponseEntity<>(productService.filteredProducts(request), HttpStatus.OK);
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getProduct(@PathVariable String id) {
         Product department = productService.getById(id).orElseThrow(() -> new ProductNotFoundException(id));
@@ -48,6 +55,16 @@ public class ProductController {
             @RequestParam(name = "search", defaultValue = "#44") String search
     ) {
         return ResponseEntity.ok(productService.filterProductsByName(search));
+    }
+
+    @GetMapping("/colors")
+    public ResponseEntity<?> findAllColors() {
+        return ResponseEntity.ok(productService.findAllDistinctColors());
+    }
+
+    @GetMapping("/sizes")
+    public ResponseEntity<?> findAllSizes() {
+        return ResponseEntity.ok(productService.findAllDistinctSizes());
     }
 
 

@@ -2,10 +2,8 @@ package com.jithin.Ecommerce.utils;
 
 import com.jithin.Ecommerce.models.Category;
 import com.jithin.Ecommerce.models.Product;
-import com.jithin.Ecommerce.models.ProductImage;
 import com.jithin.Ecommerce.models.ProductSize;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,13 +22,10 @@ public class ProductUtils {
             product.setName(PRODUCTNAME + i);
             product.setDescription(DESCRIPTION + " " + i);
             product.setPrice(45);
-            List<ProductImage> image_list = new ArrayList<>();
+            List<String> image_list = new ArrayList<>();
 
             for (int j = 0; j < 3; j++) {
-                ProductImage pImage = new ProductImage();
-                pImage.setImageName("name " + j);
-                pImage.setId("img " + j);
-                image_list.add(pImage);
+                image_list.add("name "+i);
             }
 
             product.setImages(image_list);
@@ -62,13 +57,10 @@ public class ProductUtils {
         product.setDescription(DESCRIPTION + " ");
         product.setPrice(45);
 
-        List<ProductImage> image_list = new ArrayList<>();
+        List<String> image_list = new ArrayList<>();
 
         for (int j = 0; j < 3; j++) {
-            ProductImage pImage = new ProductImage();
-            pImage.setImageName("name " + j);
-            pImage.setId("img " + j);
-            image_list.add(pImage);
+            image_list.add("pImage "+j);
         }
 
         product.setImages(image_list);

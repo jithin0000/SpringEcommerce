@@ -8,8 +8,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.ExecutableFindOperation;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +28,15 @@ class ProductServiceTest {
     @Mock
     private ProductRepository repository;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @InjectMocks
     private ProductService SUT;
 
     @BeforeEach
     void setUp() {
+
         MockitoAnnotations.initMocks(this);
     }
 
@@ -87,6 +95,17 @@ class ProductServiceTest {
     }
 
 
+    @Test
+    void findAllDistinctColors() {
+        when(mongoTemplate.query(Product.class).distinct("colors").all()).thenReturn(valid_colors());
 
+        List<Object> result = SUT.findAllDistinctColors();
 
+        assertEquals(2, result.size());
+        verify(mongoTemplate, times(1)).query(Product.class).distinct("colors");
+    }
+
+    private List<Object> valid_colors() {
+        return Arrays.asList("red","blue");
+    }
 }

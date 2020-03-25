@@ -43,13 +43,10 @@ public class Bootstrap implements CommandLineRunner {
             product.setDescription(faker.lorem().sentence(50));
             product.setPrice(faker.number().numberBetween(5688, 315478));
 
-            List<ProductImage> image_list = new ArrayList<>();
+            List<String> image_list = new ArrayList<>();
 
             for (int j = 0; j < 3; j++) {
-                ProductImage pImage = new ProductImage();
-                pImage.setImageName(faker.funnyName().name());
-
-                image_list.add(imageService.create(pImage));
+                image_list.add(faker.internet().image());
             }
 
             product.setImages(image_list);
@@ -74,12 +71,12 @@ public class Bootstrap implements CommandLineRunner {
 
     private void generateCategories(Faker faker) {
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 8; i++) {
             Category category = new Category();
             category.setName(faker.commerce().department());
             Category createdCategory = categoryService.create(category);
 
-            for (int j = 0; j < 3; j++) {
+            for (int j = 0; j < 4; j++) {
                 generateProduct(createdCategory ,faker);
             }
 

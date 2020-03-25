@@ -78,6 +78,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/category/**",
                         "/api/product/**")
                 .permitAll()
+                .antMatchers("/api/product/filter").permitAll()
                 .anyRequest().fullyAuthenticated();
 
         http.addFilterBefore(authenticationFilter(),

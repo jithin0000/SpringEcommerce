@@ -24,7 +24,7 @@ public class Product extends BaseModel {
     private Category category;
 
     private String thumbUrl = "";
-    private List<ProductImage> images = new ArrayList<>();
+    private List<String> images = new ArrayList<>();
 
     @NotNull(message = "colors is required field ")
     private List<String> colors;
